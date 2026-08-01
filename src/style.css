@@ -28,6 +28,25 @@ body{
 
 }
 
+/* Lightweight fallback for mobile / touch / no-WebGPU devices —
+   no canvas, no render loop, just a static gradient. */
+body.no-webgpu{
+
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            rgba(120,90,200,.20),
+            transparent 55%
+        ),
+        radial-gradient(
+            circle at 75% 65%,
+            rgba(80,160,190,.16),
+            transparent 55%
+        ),
+        #050505;
+
+}
+
 
 
 /* ===========================
