@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects | Ganesh Kumar Pandey</title>
-    <meta name="description" content="Research projects by Ganesh Kumar Pandey — AI and power systems.">
+    <meta name="description" content="Research projects by Ganesh Kumar Pandey — optimization, decentralized energy markets, and grid AI.">
     <link rel="icon" href="/favicon.svg">
 </head>
 <body>
@@ -23,10 +23,11 @@
 
 <section class="page-header">
     <p class="small-title">PROJECTS</p>
-    <h1>Featured Projects</h1>
+    <h1>Selected Research Contributions</h1>
     <p>
-        Research and engineering work spanning AI architectures, privacy-preserving systems,
-        and energy storage dispatch.
+        Optimization algorithms and decentralized market architectures for renewable-integrated
+        power grids — each validated on IEEE benchmark networks and carried through to journal
+        publication.
     </p>
 </section>
 
@@ -35,46 +36,68 @@
         <div class="card-grid">
 
             <div class="card">
-                <span class="status">Patent In Progress &middot; Manuscript in Revision</span>
-                <h3>CF-ET — Constraint-Aware Transformer</h3>
+                <span class="status">Published &middot; International Journal of Ambient Energy, 2024</span>
+                <h3>Droop-Based Economic Dispatch for Islanded Microgrids</h3>
                 <p>
-                    A deep learning architecture for counterfactual grid decision support.
-                    The core idea is a Kronecker-product feasibility mask applied directly to
-                    transformer attention scores before softmax, so that recommended grid
-                    actions are guaranteed to respect physical operating constraints rather
-                    than being filtered after the fact.
+                    Analytical dispatch method coupling droop control with economic dispatch for
+                    autonomous microgrid operation under renewable generation and demand response.
                 </p>
-                <p>
-                    Built as a full 12-file PyTorch codebase with a Flask API and an operator
-                    demo interface. Initial submission to IEEE Transactions on Artificial
-                    Intelligence was desk-rejected; the work is being strengthened with
-                    additional experiments, proofs, and baselines for resubmission to IEEE
-                    Transactions on Smart Grid or IEEE TNNLS.
-                </p>
-                <p class="meta">Patent application in progress via IIT Kharagpur's Technology Transfer Cell.</p>
+                <p class="meta">Validated on a modified 33-bus islanded microgrid over a 24-hour horizon: equal incremental cost in 23 of 24 hours, with 190.89 kWh of demand curtailment under an $868.80 daily incentive budget.</p>
             </div>
 
             <div class="card">
-                <span class="status">Targeting IEEE TSG</span>
+                <span class="status">Journal Revision &middot; Sustainable Energy, Grids and Networks (Elsevier)</span>
+                <h3>Blockchain-Enabled Peer-to-Peer Energy Market</h3>
+                <p>
+                    End-to-end decentralized electricity trading platform on Ethereum — smart-contract
+                    settlement, automated battery-storage scheduling, and utility fallback — validated
+                    for grid impact on IEEE benchmark distribution systems.
+                </p>
+                <p class="meta">Simulated a 100-node community (20 prosumers, 80 consumers): up to 10.85% consumer cost savings and a ~40% cut in evening peak demand vs. a centralized tariff baseline, with on-chain settlement in ~1.2s per trade across 2,100+ trades.</p>
+            </div>
+
+            <div class="card">
+                <span class="status">Journal Revision &middot; Journal of Energy Storage (Elsevier)</span>
+                <h3>Closed-Form Locational Pricing for Mobile Energy Storage</h3>
+                <p>
+                    Analytical dispatch framework coordinating mobile storage across coupled
+                    transportation and power networks — relevant to EV-fleet-as-storage and
+                    grid-support use cases. The closed-form rule needs only one AC power-flow
+                    evaluation per coordination step, eliminating iterative station-level optimization.
+                </p>
+                <p class="meta">On the coupled Sioux Falls/33-bus testbed, recovered 44.7% of EV-induced voltage drop and cut active power losses by 24.2%; converges in 4-92 iterations.</p>
+            </div>
+
+            <div class="card">
+                <span class="status">Under Review &middot; Applied Intelligence (Springer)</span>
+                <h3>Tiger Footprint Optimization</h3>
+                <p>
+                    A new population-based metaheuristic for constrained, non-convex engineering
+                    optimization — the class of problem behind dispatch, siting, and sizing —
+                    using adaptive probe placement and adaptive step scaling. Four convergence
+                    theorems proved.
+                </p>
+                <p class="meta">Benchmarked against PSO, DE, and GWO on twelve standard functions in 10D/30D; avoided PSO's scaling collapse (1.42 → 26,100 for PSO vs. 0.65 → 14.0 for TFO), and validated on a six-unit economic dispatch benchmark reaching a feasible $15,276/h solution.</p>
+            </div>
+
+            <div class="card">
+                <span class="status">Not Yet Submitted</span>
+                <h3>CF-ET — AI for Grid Decision Support</h3>
+                <p>
+                    A deep learning approach to counterfactual grid decision support, built as a
+                    full PyTorch implementation with a demo interface. Still early-stage —
+                    more details once it's further along.
+                </p>
+            </div>
+
+            <div class="card">
+                <span class="status">Not Yet Submitted</span>
                 <h3>PAE — Privacy-Preserving Smart Grid Architecture</h3>
                 <p>
                     An architecture for protecting household-level privacy in smart meter data
-                    collection, using Chaum blind-signature tokens and data-concentrator-level
-                    aggregation. Grounded in India's CEA smart meter specifications and the
-                    RDSS smart-metering rollout, and validated on the IEEE 33-bus feeder.
+                    collection, grounded in India's smart-metering rollout context. Still
+                    early-stage — more details once it's further along.
                 </p>
-                <p class="meta">Currently weighing target journal — IEEE Transactions on Smart Grid vs. an editorially-connected alternative.</p>
-            </div>
-
-            <div class="card">
-                <span class="status">Under Review &middot; Journal of Energy Storage</span>
-                <h3>MES — Mobile Energy Storage Dispatch</h3>
-                <p>
-                    A dispatch strategy for mobile energy storage units, addressing how to
-                    schedule and route distributed, mobile storage assets across a grid to
-                    balance load and support reliability.
-                </p>
-                <p class="meta">Manuscript EST-D-26-05875, submitted April 2026, currently under review.</p>
             </div>
 
         </div>
