@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Ganesh Kumar Pandey</title>
+    <meta name="description" content="Research projects by Ganesh Kumar Pandey — AI and power systems.">
+    <link rel="icon" href="/favicon.svg">
+</head>
+<body>
+
+<nav>
+    <div class="logo">GP</div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="research.html">Research</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<section class="page-header">
+    <p class="small-title">PROJECTS</p>
+    <h1>Featured Projects</h1>
+    <p>
+        Research and engineering work spanning AI architectures, privacy-preserving systems,
+        and energy storage dispatch.
+    </p>
+</section>
+
+<section id="projects-list">
+    <div class="container" style="padding-top:0;">
+        <div class="card-grid">
+
+            <div class="card">
+                <span class="status">Patent In Progress &middot; Manuscript in Revision</span>
+                <h3>CF-ET — Constraint-Aware Transformer</h3>
+                <p>
+                    A deep learning architecture for counterfactual grid decision support.
+                    The core idea is a Kronecker-product feasibility mask applied directly to
+                    transformer attention scores before softmax, so that recommended grid
+                    actions are guaranteed to respect physical operating constraints rather
+                    than being filtered after the fact.
+                </p>
+                <p>
+                    Built as a full 12-file PyTorch codebase with a Flask API and an operator
+                    demo interface. Initial submission to IEEE Transactions on Artificial
+                    Intelligence was desk-rejected; the work is being strengthened with
+                    additional experiments, proofs, and baselines for resubmission to IEEE
+                    Transactions on Smart Grid or IEEE TNNLS.
+                </p>
+                <p class="meta">Patent application in progress via IIT Kharagpur's Technology Transfer Cell.</p>
+            </div>
+
+            <div class="card">
+                <span class="status">Targeting IEEE TSG</span>
+                <h3>PAE — Privacy-Preserving Smart Grid Architecture</h3>
+                <p>
+                    An architecture for protecting household-level privacy in smart meter data
+                    collection, using Chaum blind-signature tokens and data-concentrator-level
+                    aggregation. Grounded in India's CEA smart meter specifications and the
+                    RDSS smart-metering rollout, and validated on the IEEE 33-bus feeder.
+                </p>
+                <p class="meta">Currently weighing target journal — IEEE Transactions on Smart Grid vs. an editorially-connected alternative.</p>
+            </div>
+
+            <div class="card">
+                <span class="status">Under Review &middot; Journal of Energy Storage</span>
+                <h3>MES — Mobile Energy Storage Dispatch</h3>
+                <p>
+                    A dispatch strategy for mobile energy storage units, addressing how to
+                    schedule and route distributed, mobile storage assets across a grid to
+                    balance load and support reliability.
+                </p>
+                <p class="meta">Manuscript EST-D-26-05875, submitted April 2026, currently under review.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2026 Ganesh Kumar Pandey &middot; IIT Kharagpur</p>
+</footer>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
