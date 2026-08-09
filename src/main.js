@@ -1,216 +1,83 @@
 import './style.css'
 
-// Skip the WebGPU scene on mobile, small screens, or browsers without
-// WebGPU support — it's heavy (per-frame raycasting + render loop) and
-// mobile GPU/WebGPU support is inconsistent. A plain CSS gradient
-// (see style.css `body.no-webgpu`) is used instead.
-const is_small_screen = window.innerWidth <= 900
-const is_touch_device = matchMedia('(pointer: coarse)').matches
-const has_webgpu = 'gpu' in navigator
+// Lightweight interactive background — a soft glow that follows the
+// pointer (mouse or touch), drawn with a single CSS radial-gradient.
+// No WebGPU / Three.js: just one div, updated on rAF, so it's cheap
+// on both desktop and mobile.
 
-if (is_small_screen || is_touch_device || !has_webgpu) {
+const glow = document.createElement('div')
 
-    document.body.classList.add('no-webgpu')
+glow.setAttribute('aria-hidden', 'true')
 
-} else {
+Object.assign(glow.style, {
 
-    run_webgpu_scene()
+    position: 'fixed',
+    inset: '0',
+    zIndex: '-1',
+    pointerEvents: 'none'
+
+})
+
+document.body.prepend(glow)
+
+let target_x = window.innerWidth * 0.7
+let target_y = window.innerHeight * 0.35
+let current_x = target_x
+let current_y = target_y
+let hue = 250
+
+function paint() {
+
+    glow.style.background =
+        `radial-gradient(circle at ${current_x}px ${current_y}px, ` +
+        `hsla(${hue}, 45%, 45%, 0.28), transparent 45%), ` +
+        `radial-gradient(circle at 20% 90%, hsla(190, 40%, 40%, 0.12), transparent 50%)`
+
+}
+
+function tick() {
+
+    current_x += (target_x - current_x) * 0.07
+    current_y += (target_y - current_y) * 0.07
+
+    paint()
+
+    requestAnimationFrame(tick)
 
 }
 
-async function run_webgpu_scene() {
+function set_target(x, y) {
 
-    const THREE = await import('three/webgpu')
-    const { TSL: $ } = await import('three/webgpu')
-    const { RectAreaLightTexturesLib } = await import('three/addons/lights/RectAreaLightTexturesLib.js')
-    const { RectAreaLightHelper } = await import('three/addons/helpers/RectAreaLightHelper.js')
-
-    THREE.RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init())
-
-    const renderer = await new THREE.WebGPURenderer().init()
-
-    const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera()
-
-    camera.position.set(0, 0, 2)
-
-    const mat = new THREE.MeshPhysicalNodeMaterial({})
-
-    const floor_mesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(100, 100),
-        mat
-    )
-
-    scene.add(floor_mesh)
-
-    const light0_tall = 0.777
-
-    const light0 = new THREE.RectAreaLight(
-        'white',
-        0,
-        light0_tall,
-        0
-    )
-
-    scene.add(light0)
-    scene.add(new RectAreaLightHelper(light0))
-
-    const rp = new THREE.RenderPipeline(renderer)
-
-    const scene_pass = $.pass(scene, camera)
-
-    rp.outputNode = $.vec4(
-        scene_pass.rgb,
-        $.mx_rgbtohsv(scene_pass.rgb).z
-            .oneMinus()
-            .pow(16)
-            .mul(0.9)
-    )
-
-    renderer.setAnimationLoop(() => {
-
-        rp.render()
-
-    })
-
-    document.body.prepend(renderer.domElement)
-
-    const light0_min_height = 0.3
-    const light0_max_height = 0.5
-    const light0_min_radius = 0.3
-    const light0_min_intensity = 1
-    const light0_max_intensity = 2
-
-    const raycaster = new THREE.Raycaster()
-
-    function handle_pointer_move(x, y) {
-
-        raycaster.setFromCamera(
-            new THREE.Vector2(x, y),
-            camera
-        )
-
-        const intersections = raycaster.intersectObject(floor_mesh)
-
-        for (const i of intersections) {
-
-            if (i.object === floor_mesh) {
-
-                const a =
-                    -Math.atan2(i.point.y, i.point.x) +
-                    Math.PI / 2
-
-                const r =
-                    Math.max(
-                        light0_min_radius,
-                        Math.hypot(i.point.x, i.point.y)
-                    ) + 0.2
-
-                light0.position.set(
-                    r * Math.sin(a),
-                    r * Math.cos(a),
-                    light0.width / 2
-                )
-
-                light0.lookAt(
-                    0,
-                    0,
-                    light0.width / 2
-                )
-
-                light0.height = Math.min(
-                    light0_max_height,
-                    Math.max(
-                        light0_min_height,
-                        Math.hypot(x, y)
-                    )
-                )
-
-                light0.intensity =
-                    light0_min_intensity +
-                    Math.min(
-                        light0_max_intensity -
-                        light0_min_intensity,
-                        Math.hypot(x, y)
-                    )
-
-            }
-
-        }
-
-    }
-
-    document.body.addEventListener('pointermove', (e) => {
-
-        const rect =
-            renderer.domElement.getBoundingClientRect()
-
-        const x =
-            ((e.clientX - rect.left) / rect.width) * 2 - 1
-
-        const y =
-            (1 - (e.clientY - rect.top) / rect.height) * 2 - 1
-
-        handle_pointer_move(x, y)
-
-    })
-
-    function update_light0_color() {
-
-        const y_ratio = Math.min(
-            1,
-            window.scrollY /
-            (
-                document.body.scrollHeight -
-                window.innerHeight
-            )
-        )
-
-        light0.color.setHSL(
-            y_ratio,
-            0.5,
-            0.5
-        )
-
-    }
-
-    window.addEventListener(
-        'scroll',
-        update_light0_color
-    )
-
-    setTimeout(() => {
-
-        handle_pointer_move(0.2, -0.2)
-
-        update_light0_color()
-
-    }, 150)
-
-    function resize() {
-
-        renderer.setPixelRatio(
-            window.devicePixelRatio
-        )
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        )
-
-        camera.aspect =
-            window.innerWidth /
-            window.innerHeight
-
-        camera.updateProjectionMatrix()
-
-    }
-
-    window.addEventListener(
-        'resize',
-        resize
-    )
-
-    resize()
+    target_x = x
+    target_y = y
 
 }
+
+window.addEventListener('pointermove', (e) => {
+
+    set_target(e.clientX, e.clientY)
+
+})
+
+window.addEventListener('touchmove', (e) => {
+
+    const t = e.touches[0]
+
+    if (t) set_target(t.clientX, t.clientY)
+
+}, { passive: true })
+
+window.addEventListener('scroll', () => {
+
+    const scrollable = Math.max(
+        1,
+        document.body.scrollHeight - window.innerHeight
+    )
+
+    const y_ratio = Math.min(1, window.scrollY / scrollable)
+
+    hue = 200 + y_ratio * 160
+
+})
+
+requestAnimationFrame(tick)
